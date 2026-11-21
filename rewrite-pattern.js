@@ -584,18 +584,19 @@ const computeCharacterClass = (characterClassItem, regenerateOptions, shouldAppl
 				}
 				break;
 			case 'characterClassEscape':
-				let escapeSet = getCharacterClassEscapeSet(
+				handler.regSet(data, getCharacterClassEscapeSet(
 					item.value,
 					config.flags.unicode || config.flags.unicodeSets,
 					config.isIgnoreCaseMode,
-					shouldApplySCF
-				);
-				if (caseEqFlags) {
-					// The escape sets are shared, so they must not be modified.
-					escapeSet = escapeSet.clone().add(getCaseEquivalentsOfSet(escapeSet, caseEqFlags));
+					// When the `i` modifier is removed (`CASE_EQ_FLAG_BMP`), the other
+					// operands include all their case equivalents, so the
+					// case-insensitive escape set, which already includes them, is used
+					// instead of its simple case folding.
+					shouldApplySCF && !(caseEqFlags & CASE_EQ_FLAG_BMP)
+				));
+				if ((item.value === 'w' || item.value === 'W') && configWordCharactersChanged()) {
 					data.transformed = true;
 				}
-				handler.regSet(data, escapeSet);
 				break;
 			case 'unicodePropertyEscape':
 				const nestedData = getUnicodePropertyEscapeCharacterClassData(

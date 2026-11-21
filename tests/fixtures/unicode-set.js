@@ -230,6 +230,14 @@ const unicodeSetFixtures = [
 		nonMatches: ['1', '!']
 	},
 	{
+		pattern: '[\\w--[a-z]]',
+		flags: 'iv',
+		options: TRANSFORM_U,
+		expected: '[0-9_]',
+		matches: ['1', '_'],
+		nonMatches: ['a', 'A', 'ſ', 'K']
+	},
+	{
 		pattern: '(?i:[\\w&&\\w])',
 		options: { modifiers: 'transform' },
 		expected: '(?:[0-9A-Z_a-z\\u017F\\u212A])',

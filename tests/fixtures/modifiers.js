@@ -502,6 +502,18 @@ const modifiersFixtures = [
 		'expected': '(?:\\d)',
 		'expectedFlags': 'u',
 	},
+	{
+		// Classes are only rewritten when the meaning of `\w` or `\W` changes.
+		'pattern': '(?i:[\\d\\s])',
+		'flags': 'u',
+		'expected': '(?:[\\d\\s])',
+		'expectedFlags': 'u',
+	},
+	{
+		'pattern': '(?i:[^\\w])',
+		'expected': '(?:[^\\w])',
+		'expectedFlags': '',
+	},
 ].filter(Boolean);
 
 exports.modifiersFixtures = modifiersFixtures;
